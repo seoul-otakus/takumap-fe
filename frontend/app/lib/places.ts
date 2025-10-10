@@ -3,46 +3,49 @@ import type { Place } from "../types";
 export const places: Place[] = [
   {
     id: 1,
-    name: "가챠가챠 신촌점",
-    category: "가챠샵",
-    address: "서울 서대문구 신촌역로 123",
-    description: "최신 일본 가챠 캡슐 토이 전문점. 애니메이션 굿즈 다수 보유",
-    latitude: 37.5559,
-    longitude: 126.9366,
-    naverMapUrl: "https://map.naver.com/v5/search/가챠가챠%20신촌점",
-    kakaoMapUrl: "https://map.kakao.com/link/search/가챠가챠%20신촌점",
+    name: "애니메이트 홍대점",
+    category: "굿즈샵",
+    address: "서울 마포구 양화로 188 AK& 홍대 5층",
+    description: "최신 일본 애니메이션 굿즈 전문점. 애니메이션 굿즈 다수 보유",
+    latitude: 37.5577458058734,
+    longitude: 126.926498328277,
+    naverMapUrl:
+      "https://map.naver.com/p/entry/place/1030608124?c=19.20,0,0,0,dh&placePath=/home?fromPanelNum=1&additionalHeight=76&timestamp=202510101034&locale=ko&svcName=map_pcv5&additionalHeight=76&timestamp=202510101034&locale=ko&svcName=map_pcv5&fromPanelNum=1",
+    kakaoMapUrl: "https://place.map.kakao.com/1569179864",
     hashtags: ["캡슐토이", "일본가챠", "신촌맛집", "애니굿즈", "덕후필수"],
     phone: "02-312-5678",
     hours: "매일 11:00 - 21:00\n연중무휴",
-    mainImage: "https://via.placeholder.com/800x500/FF6B9D/FFFFFF?text=Gacha+Shop",
+    mainImage:
+      "https://media.discordapp.net/attachments/771686259117522975/1426022340524773477/animate-1.jpg?ex=68e9b64c&is=68e864cc&hm=0efaf3354c7460de8b949b857e83170d783dc9fdf612b014e7bfc4c5cfb96edc&=&format=webp",
     images: [
-      "https://via.placeholder.com/800x500/FF6B9D/FFFFFF?text=Image+1",
-      "https://via.placeholder.com/800x500/FF8FAB/FFFFFF?text=Image+2",
-      "https://via.placeholder.com/800x500/FFB3C6/FFFFFF?text=Image+3",
-      "https://via.placeholder.com/800x500/FFC9D9/FFFFFF?text=Image+4",
-      "https://via.placeholder.com/800x500/FFE0EB/FFFFFF?text=Image+5",
+      "https://media.discordapp.net/attachments/771686259117522975/1426022342626115704/animate-4.jpg?ex=68e9b64c&is=68e864cc&hm=71a3c11147e48737a5a310bce5bc8a3ebd42b71aeae1e89c376648ff38daa4b6&=&format=webp&width=966&height=543",
+      "https://media.discordapp.net/attachments/771686259117522975/1426022342030655548/animate-3.jpg?ex=68e9b64c&is=68e864cc&hm=ece756afd9e50b41cacf7bb65e1475e4204643af1eec2e701534b86461eb3ef4&=&format=webp&width=438&height=544",
+      "https://media.discordapp.net/attachments/771686259117522975/1426022341128749146/animate-2.jpg?ex=68e9b64c&is=68e864cc&hm=c133d0492f12a1e8462bf4c2b9b7dba60606ee6d6030d0066117bc254ae166a3&=&format=webp&width=269&height=544",
+      "https://media.discordapp.net/attachments/771686259117522975/1426022340168384512/animate-6.jpg?ex=68e9b64c&is=68e864cc&hm=0c9ae30c37248dc26bf0ea8b179fe2e5d044f14f4ea397e1a7b21da2a11f9809&=&format=webp&width=725&height=544",
     ],
   },
   {
     id: 2,
-    name: "아니메이트 명동점",
+    name: "애니플러스 서울합정점",
     category: "굿즈샵",
-    address: "서울 중구 명동길 456",
+    address: "서울 마포구 월드컵로3길 14 딜라이트 스퀘어 B동 B101호",
     description:
       "일본 최대 애니메이션 굿즈 체인점. 피규어, 포스터, 한정판 상품",
-    latitude: 37.5635,
-    longitude: 126.984,
-    naverMapUrl: "https://map.naver.com/v5/search/아니메이트%20명동",
+    latitude: 37.5510079695241,
+    longitude: 126.91164899787,
+    naverMapUrl:
+      "https://map.naver.com/p/entry/place/843036027?c=18.38,0,0,0,dh&placePath=/home?from=map&fromPanelNum=1&additionalHeight=76&timestamp=202510101134&locale=ko&svcName=map_pcv5",
     kakaoMapUrl: "https://map.kakao.com/link/search/아니메이트%20명동",
     hashtags: ["아니메이트", "한정판", "명동", "피규어", "포스터"],
     phone: "02-778-1234",
     hours: "평일 10:00 - 22:00\n주말 10:00 - 23:00",
-    mainImage: "https://via.placeholder.com/800x500/38BDF8/FFFFFF?text=Animate",
+    mainImage:
+      "https://media.discordapp.net/attachments/771686259117522975/1426036024206819480/1.jpg?ex=68e9c30a&is=68e8718a&hm=16443eb0c3888ca4ed7d8191cf0f8ac24dbeded6610b4d6a9015246a714c5d80&=&format=webp",
     images: [
-      "https://via.placeholder.com/800x500/38BDF8/FFFFFF?text=Store+1",
-      "https://via.placeholder.com/800x500/60C5F1/FFFFFF?text=Store+2",
-      "https://via.placeholder.com/800x500/7DD3F4/FFFFFF?text=Store+3",
-      "https://via.placeholder.com/800x500/9FE1F7/FFFFFF?text=Store+4",
+      "https://media.discordapp.net/attachments/771686259117522975/1426036023707566160/5.jpg?ex=68e9c30a&is=68e8718a&hm=7575e4d4fab513a65af0cca1fb7d298706d66e4e8387e7917310c1f7ca35c4b1&=&format=webp&width=640&height=544",
+      "https://media.discordapp.net/attachments/771686259117522975/1426036025817563246/3.jpg?ex=68e9c30b&is=68e8718b&hm=f13191d7687e33bf80848716c5aa8d06a673580e61322ecf8cd2322a8d519436&=&format=webp&width=966&height=543",
+      "https://media.discordapp.net/attachments/771686259117522975/1426036026471612456/4.jpg?ex=68e9c30b&is=68e8718b&hm=bae20791cc9af2bb9ab33dc78a4dd5db665cee4c1c20b7bdc40b324e854392e4&=&format=webp&width=725&height=544",
+      "https://media.discordapp.net/attachments/771686259117522975/1426036025192353792/2.jpg?ex=68e9c30a&is=68e8718a&hm=c8e8246fc463059be90bdd54a8b65ee34ea7af8c5c2753cb25f7e8896dbfa4a4&=&format=webp&width=408&height=544",
     ],
   },
   {
@@ -58,7 +61,8 @@ export const places: Place[] = [
     hashtags: ["피규어", "프라모델", "홍대", "애니굿즈"],
     phone: "02-325-8877",
     hours: "매일 12:00 - 22:00\n매주 월요일 휴무",
-    mainImage: "https://via.placeholder.com/800x500/A855F7/FFFFFF?text=Figure+Shop",
+    mainImage:
+      "https://via.placeholder.com/800x500/A855F7/FFFFFF?text=Figure+Shop",
     images: [
       "https://via.placeholder.com/800x500/A855F7/FFFFFF?text=Figure+1",
       "https://via.placeholder.com/800x500/B87FF8/FFFFFF?text=Figure+2",
@@ -78,7 +82,8 @@ export const places: Place[] = [
     hashtags: ["애니카페", "콜라보", "강남", "테마카페", "굿즈"],
     phone: "02-567-3456",
     hours: "평일 10:00 - 22:00\n주말 10:00 - 24:00",
-    mainImage: "https://via.placeholder.com/800x500/F59E0B/FFFFFF?text=Anime+Cafe",
+    mainImage:
+      "https://via.placeholder.com/800x500/F59E0B/FFFFFF?text=Anime+Cafe",
     images: [
       "https://via.placeholder.com/800x500/F59E0B/FFFFFF?text=Cafe+1",
       "https://via.placeholder.com/800x500/FBBF24/FFFFFF?text=Cafe+2",
@@ -100,7 +105,8 @@ export const places: Place[] = [
     hashtags: ["200종이상", "이태원", "캡슐토이", "가챠천국"],
     phone: "02-795-6789",
     hours: "매일 11:00 - 21:00\n연중무휴",
-    mainImage: "https://via.placeholder.com/800x500/EC4899/FFFFFF?text=Capsule+Toy",
+    mainImage:
+      "https://via.placeholder.com/800x500/EC4899/FFFFFF?text=Capsule+Toy",
     images: [
       "https://via.placeholder.com/800x500/EC4899/FFFFFF?text=Toy+1",
       "https://via.placeholder.com/800x500/F472B6/FFFFFF?text=Toy+2",
@@ -152,7 +158,8 @@ export const places: Place[] = [
     hashtags: ["건담", "프라모델", "한정판", "공식스토어", "용산"],
     phone: "02-2012-3456",
     hours: "매일 11:00 - 20:00\n매주 화요일 휴무",
-    mainImage: "https://via.placeholder.com/800x500/6366F1/FFFFFF?text=Gundam+Base",
+    mainImage:
+      "https://via.placeholder.com/800x500/6366F1/FFFFFF?text=Gundam+Base",
     images: [
       "https://via.placeholder.com/800x500/6366F1/FFFFFF?text=Gundam+1",
       "https://via.placeholder.com/800x500/818CF8/FFFFFF?text=Gundam+2",
@@ -195,7 +202,8 @@ export const places: Place[] = [
     hashtags: ["300종이상", "코엑스", "대형매장", "최다보유", "강남"],
     phone: "02-6002-5555",
     hours: "매일 10:00 - 22:00\n연중무휴",
-    mainImage: "https://via.placeholder.com/800x500/EF4444/FFFFFF?text=Gacha+Land",
+    mainImage:
+      "https://via.placeholder.com/800x500/EF4444/FFFFFF?text=Gacha+Land",
     images: [
       "https://via.placeholder.com/800x500/EF4444/FFFFFF?text=Land+1",
       "https://via.placeholder.com/800x500/F87171/FFFFFF?text=Land+2",
