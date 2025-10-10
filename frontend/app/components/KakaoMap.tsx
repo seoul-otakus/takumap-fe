@@ -1,70 +1,20 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import type { Place } from "../types/index";
+import type { KakaoMap, KakaoMarker, KakaoInfoWindow } from "../types/kakao";
 
 interface KakaoMapProps {
   places: Place[];
 }
 
-declare global {
-  interface Window {
-    kakao: any;
-  }
-}
-
 const KakaoMap = ({ places }: KakaoMapProps) => {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const mapInstance = useRef<any>(null);
-  const markersRef = useRef<any[]>([]);
-  const currentInfowindowRef = useRef<any>(null);
+  const mapInstance = useRef<KakaoMap | null>(null);
+  const markersRef = useRef<KakaoMarker[]>([]);
+  const currentInfowindowRef = useRef<KakaoInfoWindow | null>(null);
 
-  useEffect(() => {
-    // 이미 지도가 초기화되어 있으면 리턴
-    if (mapInstance.current) return;
-
-    const initMap = () => {
-      if (!mapContainer.current || mapInstance.current) return;
-
-      window.kakao.maps.load(() => {
-        const container = mapContainer.current;
-        if (!container || mapInstance.current) return;
-
-        const options = {
-          center: new window.kakao.maps.LatLng(37.5665, 126.978), // 서울시청 기준
-          level: 8,
-        };
-
-        const map = new window.kakao.maps.Map(container, options);
-        mapInstance.current = map;
-
-        // 지도 클릭 시 인포윈도우 닫기
-        window.kakao.maps.event.addListener(map, "click", () => {
-          if (currentInfowindowRef.current) {
-            currentInfowindowRef.current.close();
-            currentInfowindowRef.current = null;
-          }
-        });
-
-        // 초기 마커 생성
-        createMarkers(map);
-      });
-    };
-
-    if (!mapContainer.current) return;
-
-    // Kakao Maps API가 로드될 때까지 대기
-    const checkKakaoLoaded = setInterval(() => {
-      if (window.kakao && window.kakao.maps) {
-        clearInterval(checkKakaoLoaded);
-        initMap();
-      }
-    }, 100);
-
-    return () => clearInterval(checkKakaoLoaded);
-  }, []);
-
-  const createMarkers = (map: any) => {
+  const createMarkers = useCallback((map: KakaoMap) => {
     // 기존 마커 제거
     markersRef.current.forEach((marker) => marker.setMap(null));
     markersRef.current = [];
@@ -120,14 +70,59 @@ const KakaoMap = ({ places }: KakaoMapProps) => {
         }
       });
     });
-  };
+  }, [places]);
+
+  useEffect(() => {
+    // 이미 지도가 초기화되어 있으면 리턴
+    if (mapInstance.current) return;
+
+    const initMap = () => {
+      if (!mapContainer.current || mapInstance.current) return;
+
+      window.kakao.maps.load(() => {
+        const container = mapContainer.current;
+        if (!container || mapInstance.current) return;
+
+        const options = {
+          center: new window.kakao.maps.LatLng(37.5665, 126.978), // 서울시청 기준
+          level: 8,
+        };
+
+        const map = new window.kakao.maps.Map(container, options);
+        mapInstance.current = map;
+
+        // 지도 클릭 시 인포윈도우 닫기
+        window.kakao.maps.event.addListener(map, "click", () => {
+          if (currentInfowindowRef.current) {
+            currentInfowindowRef.current.close();
+            currentInfowindowRef.current = null;
+          }
+        });
+
+        // 초기 마커 생성
+        createMarkers(map);
+      });
+    };
+
+    if (!mapContainer.current) return;
+
+    // Kakao Maps API가 로드될 때까지 대기
+    const checkKakaoLoaded = setInterval(() => {
+      if (window.kakao && window.kakao.maps) {
+        clearInterval(checkKakaoLoaded);
+        initMap();
+      }
+    }, 100);
+
+    return () => clearInterval(checkKakaoLoaded);
+  }, [createMarkers]);
 
   // places가 변경될 때 마커 업데이트
   useEffect(() => {
     if (mapInstance.current) {
       createMarkers(mapInstance.current);
     }
-  }, [places]);
+  }, [places, createMarkers]);
 
   return (
     <div className="px-4 md:px-8 py-6">
