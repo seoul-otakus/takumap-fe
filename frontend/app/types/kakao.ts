@@ -25,7 +25,7 @@ export interface MapOptions {
 
 export interface MarkerOptions {
   position: KakaoLatLng;
-  title: string;
+  title?: string;
 }
 
 export interface InfoWindowOptions {

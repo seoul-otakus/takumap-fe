@@ -44,10 +44,7 @@ export default function PlaceDetailPage() {
         if (!container) return;
 
         const options = {
-          center: new window.kakao.maps.LatLng(
-            place.latitude,
-            place.longitude
-          ),
+          center: new window.kakao.maps.LatLng(place.latitude, place.longitude),
           level: 3,
         };
 
