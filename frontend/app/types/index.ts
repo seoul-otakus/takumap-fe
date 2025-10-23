@@ -16,3 +16,14 @@ export interface Place {
 }
 
 export type ViewMode = "list" | "map";
+
+export interface Review {
+  id: string;
+  placeId: number;
+  nickname: string;
+  rating: number; // 1-5
+  content: string;
+  images: string[]; // base64 encoded images
+  createdAt: string; // ISO 8601 date string
+  updatedAt?: string; // ISO 8601 date string
+}

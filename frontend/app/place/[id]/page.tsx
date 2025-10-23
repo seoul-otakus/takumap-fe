@@ -16,6 +16,7 @@ import {
 import type { Place } from "../../types/index";
 import { places } from "../../lib/places";
 import KakaoIcon from "../../components/icons/KakaoIcon";
+import ReviewSection from "../../components/reviews/ReviewSection";
 
 export default function PlaceDetailPage() {
   const params = useParams();
@@ -324,6 +325,9 @@ export default function PlaceDetailPage() {
             </div>
           </div>
         </div>
+
+        {/* 리뷰 섹션 */}
+        <ReviewSection placeId={place.id} />
       </div>
     </div>
   );
