@@ -1,4 +1,5 @@
 import { MapPin, Sparkles } from "lucide-react";
+import Link from "next/link";
 
 const Header = () => {
   return (
@@ -20,6 +21,17 @@ const Header = () => {
         </p>
         <div className="mt-3 flex items-center justify-center gap-2 text-sm">
           <span>서울의 모든 오타쿠 성지를 한눈에</span>
+        </div>
+
+        {/* 🔥 로그인 버튼 추가 영역 */}
+        <div className="mt-6 flex justify-center">
+          <Link
+            href="/login"
+            className="bg-white text-primary font-semibold py-2 px-4 rounded-lg hover:bg-gray-100 transition"
+          >
+            로그인 / 회원가입
+          </Link>
+
         </div>
       </div>
     </header>
