@@ -80,11 +80,6 @@ export default function ReviewForm({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!content.trim()) {
-      alert("리뷰 내용을 입력해주세요.");
-      return;
-    }
-
     onSubmit({
       nickname: currentNickname,
       rating,

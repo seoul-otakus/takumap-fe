@@ -58,10 +58,6 @@ export default function ReviewItem({
   };
 
   const handleSaveEdit = () => {
-    if (!editContent.trim()) {
-      alert("리뷰 내용을 입력해주세요.");
-      return;
-    }
 
     onUpdate(review.id, {
       rating: editRating,
