@@ -120,13 +120,13 @@ export default function LoginPage() {
                 */}
                 {/* 2. 소셜 로그인 버튼 */}
                 <div className="space-y-4">
-                    {/* <button
+                    <button
                         className={getButtonStyle("text-black", "bg-[#E9E9E9]", "hover:bg-[#D3D3D3]")}
                         onClick={() => handleSocialLogin('google')}
                     >
                         <FcGoogle className="w-6 h-6" />
                         Google로 로그인
-                    </button> */}
+                    </button>
 
                     <button
                         className={getButtonStyle("text-black", "bg-[#FEE500]", "hover:bg-[#FDD835]")}
