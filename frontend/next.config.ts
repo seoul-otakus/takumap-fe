@@ -27,7 +27,7 @@ const nextConfig: NextConfig = {
         // 2. 실제 백엔드 서버 주소 (8080 포트)
         // source의 나머지 경로(path*)를 destination에 붙여서 보냅니다.
         // 예: http://localhost:8080/api/v1/auth/check
-        destination: 'http://localhost:8080/api/v1/:path*',
+        destination: 'https://api.ourhour.cloud/api/v1/:path*',
       },
     ];
   },

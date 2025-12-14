@@ -17,6 +17,74 @@ export interface Place {
 
 export type ViewMode = "list" | "map";
 
+// 백엔드 API 응답 타입
+export interface ReviewDetailResponse {
+  id: number;
+  writer: {
+    id: number;
+    nickname: string;
+  };
+  shop: {
+    id: number;
+    name: string;
+  };
+  rating: number;
+  content: string;
+  createdAt: string;
+  updatedAt?: string;
+  images: {
+    objectKey: string;
+    downloadUrl: string;
+  }[];
+}
+
+export interface ReviewSingleResponse {
+  id: number;
+  writer: {
+    id: number;
+    nickname: string;
+  };
+  shopId: number;
+  rating: number;
+  content: string;
+  createdAt: string;
+  images: {
+    objectKey: string;
+    downloadUrl: string;
+  }[];
+}
+
+// 백엔드 API 요청 타입
+export interface ReviewCreateRequest {
+  shopId: number;
+  rating: number; // 0.5 ~ 5.0
+  content?: string;
+  objectKeys?: string[]; // S3에 업로드된 이미지 objectKey 목록
+}
+
+export interface ReviewUpdateRequest {
+  rating?: number;
+  content?: string;
+  objectKeys?: string[];
+}
+
+// 페이지네이션 응답 타입
+export interface PageResponse<T> {
+  content: T[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  last: boolean;
+}
+
+// API 응답 래퍼 타입
+export interface ApiResponse<T> {
+  result: T;
+  message: string;
+}
+
+// 로컬에서 사용하는 Review 타입 (기존 호환성 유지)
 export interface Review {
   id: string;
   placeId: number;
