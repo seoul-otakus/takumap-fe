@@ -6,9 +6,11 @@ import PlaceCard from "./PlaceCard";
 
 interface PlaceListProps {
   places: Place[];
+  isLoggedIn?: boolean;
+  onFavoriteChange?: (placeId: number, isFavorited: boolean) => void;
 }
 
-const PlaceList = ({ places }: PlaceListProps) => {
+const PlaceList = ({ places, isLoggedIn = false, onFavoriteChange }: PlaceListProps) => {
   const [visibleCount, setVisibleCount] = useState(20);
   const [isLoading, setIsLoading] = useState(false);
   const observerTarget = useRef<HTMLDivElement>(null);
@@ -51,7 +53,12 @@ const PlaceList = ({ places }: PlaceListProps) => {
     <div className="px-4 md:px-8 py-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {visiblePlaces.map((place) => (
-          <PlaceCard key={place.id} place={place} />
+          <PlaceCard
+            key={place.id}
+            place={place}
+            isLoggedIn={isLoggedIn}
+            onFavoriteChange={onFavoriteChange}
+          />
         ))}
       </div>
 

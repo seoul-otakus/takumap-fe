@@ -1,8 +1,13 @@
 "use client";
 
+import { Star } from "lucide-react";
+
 interface CategoryFilterProps {
   selectedCategories: string[];
   onCategoryChange: (categories: string[]) => void;
+  showFavoritesOnly?: boolean;
+  onFavoritesToggle?: (show: boolean) => void;
+  isLoggedIn?: boolean;
 }
 
 const categories = [
@@ -19,6 +24,9 @@ const categories = [
 const CategoryFilter = ({
   selectedCategories,
   onCategoryChange,
+  showFavoritesOnly = false,
+  onFavoritesToggle,
+  isLoggedIn = false,
 }: CategoryFilterProps) => {
   const handleCategoryClick = (value: string) => {
     if (value === "all") {
@@ -57,6 +65,24 @@ const CategoryFilter = ({
             {category.name}
           </button>
         ))}
+
+        {/* 즐겨찾기 필터 (로그인 시에만 표시) */}
+        {isLoggedIn && onFavoritesToggle && (
+          <button
+            onClick={() => onFavoritesToggle(!showFavoritesOnly)}
+            className={`px-4 py-2 rounded-full text-sm font-semibold transition-all flex items-center gap-1.5 ${
+              showFavoritesOnly
+                ? "bg-yellow-400 text-white shadow-md"
+                : "bg-white text-gray-700 border border-gray-300 hover:border-yellow-400 hover:text-yellow-400"
+            }`}
+          >
+            <Star
+              size={16}
+              className={showFavoritesOnly ? "fill-white" : "fill-none"}
+            />
+            즐겨찾기만
+          </button>
+        )}
       </div>
     </div>
   );

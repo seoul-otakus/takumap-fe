@@ -1,14 +1,54 @@
+"use client";
+
 import { MapPin, Star, Image as ImageIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import type { Place } from "../types/index";
 import KakaoIcon from "./icons/KakaoIcon";
+import { toggleFavorite } from "../lib/favoriteApi";
 
 interface PlaceCardProps {
   place: Place;
+  isLoggedIn?: boolean;
+  onFavoriteChange?: (placeId: number, isFavorited: boolean) => void;
 }
 
-const PlaceCard = ({ place }: PlaceCardProps) => {
+const PlaceCard = ({ place, isLoggedIn = false, onFavoriteChange }: PlaceCardProps) => {
+  const [isFavorited, setIsFavorited] = useState(place.isFavorited || false);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  const handleFavoriteClick = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!isLoggedIn) {
+      alert("로그인이 필요한 기능입니다.");
+      return;
+    }
+
+    try {
+      // 낙관적 업데이트
+      setIsFavorited(!isFavorited);
+      setIsAnimating(true);
+
+      // API 호출
+      const newState = await toggleFavorite(place.id);
+
+      // 애니메이션 효과 (500ms 후 제거)
+      setTimeout(() => setIsAnimating(false), 500);
+
+      // 부모 컴포넌트에 변경 알림
+      onFavoriteChange?.(place.id, newState);
+    } catch (error) {
+      // 에러 발생 시 상태 롤백
+      setIsFavorited(isFavorited);
+      setIsAnimating(false);
+      console.error("즐겨찾기 토글 실패:", error);
+      alert("즐겨찾기 처리에 실패했습니다.");
+    }
+  };
+
   const getCategoryStyle = (category: string) => {
     const styles: { [key: string]: string } = {
       가챠샵: "bg-gradient-to-r from-pink-500 to-rose-500 text-white",
@@ -32,6 +72,26 @@ const PlaceCard = ({ place }: PlaceCardProps) => {
       <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden border border-gray-100 cursor-pointer">
         {/* 상단 장식 라인 */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-accent"></div>
+
+        {/* 즐겨찾기 별 아이콘 (로그인 시에만 표시) */}
+        {isLoggedIn && (
+          <button
+            onClick={handleFavoriteClick}
+            className={`absolute top-4 right-4 z-20 p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:scale-110 transition-all duration-300 ${
+              isAnimating ? "animate-bounce" : ""
+            }`}
+            aria-label={isFavorited ? "즐겨찾기 해제" : "즐겨찾기 추가"}
+          >
+            <Star
+              size={24}
+              className={`transition-all duration-300 ${
+                isFavorited
+                  ? "fill-yellow-400 text-yellow-400"
+                  : "fill-none text-gray-400 hover:text-yellow-400"
+              }`}
+            />
+          </button>
+        )}
 
         {/* 대표 이미지 */}
         {place.mainImage ? (

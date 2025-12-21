@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import type { ViewMode } from "./types/index";
-import { places } from "./lib/places";
+import type { ViewMode, Place } from "./types/index";
+import { places as staticPlaces } from "./lib/places";
+import { checkAuth } from "./lib/authApi";
+import { getFavoriteShopIds } from "./lib/favoriteApi";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ViewTabs from "./components/ViewTabs";
@@ -15,6 +17,37 @@ export default function Home() {
   const [viewMode, setViewMode] = useState<ViewMode>("list");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [favoriteShopIds, setFavoriteShopIds] = useState<Set<number>>(new Set());
+  const [places, setPlaces] = useState<Place[]>([]);
+
+  // 로그인 상태 확인 및 즐겨찾기 목록 조회
+  useEffect(() => {
+    const verifyAuth = async () => {
+      const authenticated = await checkAuth();
+      setIsLoggedIn(authenticated);
+
+      if (authenticated) {
+        try {
+          const ids = await getFavoriteShopIds();
+          setFavoriteShopIds(new Set(ids));
+        } catch (error) {
+          console.error("즐겨찾기 목록 조회 실패:", error);
+        }
+      }
+    };
+    verifyAuth();
+  }, []);
+
+  // 정적 데이터에 즐겨찾기 상태 매핑
+  useEffect(() => {
+    const placesWithFavorites = staticPlaces.map(place => ({
+      ...place,
+      isFavorited: favoriteShopIds.has(place.id)
+    }));
+    setPlaces(placesWithFavorites);
+  }, [favoriteShopIds]);
 
   // 컴포넌트 마운트 시 세션 스토리지에서 불러오기
   useEffect(() => {
@@ -29,9 +62,14 @@ export default function Home() {
     sessionStorage.setItem("viewMode", viewMode);
   }, [viewMode]);
 
-  // 검색 및 카테고리 필터링
+  // 검색, 카테고리, 즐겨찾기 필터링
   const filteredPlaces = useMemo(() => {
     let result = places;
+
+    // 즐겨찾기 필터
+    if (showFavoritesOnly) {
+      result = result.filter((place) => place.isFavorited);
+    }
 
     // 카테고리 필터링
     if (selectedCategories.length > 0) {
@@ -51,7 +89,7 @@ export default function Home() {
     }
 
     return result;
-  }, [searchKeyword, selectedCategories]);
+  }, [places, searchKeyword, selectedCategories, showFavoritesOnly]);
 
   const handleSearch = (keyword: string) => {
     setSearchKeyword(keyword);
@@ -59,6 +97,22 @@ export default function Home() {
 
   const handleCategoryChange = (categories: string[]) => {
     setSelectedCategories(categories);
+  };
+
+  const handleFavoritesToggle = (show: boolean) => {
+    setShowFavoritesOnly(show);
+  };
+
+  const handleFavoriteChange = (placeId: number, isFavorited: boolean) => {
+    setFavoriteShopIds(prev => {
+      const newSet = new Set(prev);
+      if (isFavorited) {
+        newSet.add(placeId);
+      } else {
+        newSet.delete(placeId);
+      }
+      return newSet;
+    });
   };
 
   return (
@@ -88,13 +142,21 @@ export default function Home() {
           <CategoryFilter
             selectedCategories={selectedCategories}
             onCategoryChange={handleCategoryChange}
+            showFavoritesOnly={showFavoritesOnly}
+            onFavoritesToggle={handleFavoritesToggle}
+            isLoggedIn={isLoggedIn}
           />
         </div>
 
         <ViewTabs viewMode={viewMode} onViewModeChange={setViewMode} />
 
         {viewMode === "list" ? (
-          <PlaceList places={filteredPlaces} key={`${searchKeyword}-${selectedCategories.join(",")}`} />
+          <PlaceList
+            places={filteredPlaces}
+            isLoggedIn={isLoggedIn}
+            onFavoriteChange={handleFavoriteChange}
+            key={`${searchKeyword}-${selectedCategories.join(",")}-${showFavoritesOnly}`}
+          />
         ) : (
           <KakaoMap places={filteredPlaces} />
         )}

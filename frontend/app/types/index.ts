@@ -13,6 +13,7 @@ export interface Place {
   hashtags?: string[]; // 해시태그
   phone?: string; // 전화번호
   hours?: string; // 운영시간
+  isFavorited?: boolean; // 즐겨찾기 여부
 }
 
 export type ViewMode = "list" | "map";
@@ -80,8 +81,10 @@ export interface PageResponse<T> {
 
 // API 응답 래퍼 타입
 export interface ApiResponse<T> {
-  result: T;
+  status: string;
+  data: T;
   message: string;
+  errorCode?: number;
 }
 
 // 로컬에서 사용하는 Review 타입 (기존 호환성 유지)
