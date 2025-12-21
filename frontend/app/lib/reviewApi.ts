@@ -5,7 +5,7 @@ import type {
   ReviewCreateRequest,
   ReviewUpdateRequest,
   ApiResponse,
-  PageResponse
+  PageResponse,
 } from "../types";
 
 /**
@@ -20,13 +20,12 @@ export async function getReviews(
   size: number = 10
 ): Promise<PageResponse<ReviewSingleResponse>> {
   try {
-    const response = await api.get<ApiResponse<PageResponse<ReviewSingleResponse>>>(
-      `/api/v1/reviews`,
-      {
-        params: { shopId, page, size, sort: "createdAt,desc" }
-      }
-    );
-    return response.data.result;
+    const response = await api.get<
+      ApiResponse<PageResponse<ReviewSingleResponse>>
+    >(`/api/v1/reviews`, {
+      params: { shopId, page, size, sort: "createdAt,desc" },
+    });
+    return response.data.data;
   } catch (error) {
     console.error("Failed to load reviews:", error);
     throw error;
@@ -37,12 +36,14 @@ export async function getReviews(
  * 리뷰 상세 조회
  * @param reviewId 리뷰 ID
  */
-export async function getReviewById(reviewId: number): Promise<ReviewDetailResponse> {
+export async function getReviewById(
+  reviewId: number
+): Promise<ReviewDetailResponse> {
   try {
     const response = await api.get<ApiResponse<ReviewDetailResponse>>(
       `/api/v1/reviews/${reviewId}`
     );
-    return response.data.result;
+    return response.data.data;
   } catch (error) {
     console.error("Failed to load review:", error);
     throw error;
@@ -61,7 +62,7 @@ export async function createReview(
       `/api/v1/reviews`,
       reviewData
     );
-    return response.data.result;
+    return response.data.data;
   } catch (error) {
     console.error("Failed to create review:", error);
     throw error;
@@ -82,7 +83,7 @@ export async function updateReview(
       `/api/v1/reviews/${reviewId}`,
       reviewData
     );
-    return response.data.result;
+    return response.data.data;
   } catch (error) {
     console.error("Failed to update review:", error);
     throw error;
