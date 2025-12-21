@@ -98,3 +98,32 @@ export interface Review {
   createdAt: string; // ISO 8601 date string
   updatedAt?: string; // ISO 8601 date string
 }
+
+// User 관련 타입
+export interface User {
+  id: number;
+  nickname: string;
+  userId: string;
+  email: string;
+  role: 'ROLE_USER' | 'ROLE_ADMIN';
+}
+
+export interface UserListItem {
+  id: number;
+  nickname: string;
+  userId: string;
+  email: string;
+  role: 'ROLE_USER' | 'ROLE_ADMIN';
+  provider: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface UserListResponse {
+  content: UserListItem[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  last: boolean;
+}

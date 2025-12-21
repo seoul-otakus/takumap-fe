@@ -1,38 +1,33 @@
 'use client'; // 이 지시자는 Next.js 환경에서 필수입니다.
 
-import { MapPin, Sparkles } from "lucide-react";
+import { MapPin, Settings } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import api from "@/lib/api";
+import { User } from "../types";
+import { getCurrentUser } from "../lib/authApi";
 
 const Header = () => {
+    const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
 
     // const BACKEND_URL = "http://localhost:8080/api/v1";
     
     useEffect(() => {
         const verifyAuth = async () => {
-            // 백엔드의 간단한 인증 확인 엔드포인트 (예: /api/v1/user/me)
-            const AUTH_CHECK_URL = '/api/v1/auth/check';
-
             try {
-                // api.get()은 자동으로 withCredentials를 처리.
-                const response = await api.get(AUTH_CHECK_URL);
-
-                // axios는 response.ok 대신 status 코드를 사용.
-                if (response.status === 200) {
-                    setIsLoggedIn(true);
-                } else {
-                    // 401/403 에러 는 인터셉터에서 처리되므로, 여기에 도달하면 다른 종류의 에러이다.
-                    setIsLoggedIn(false);
-                }
+                // 현재 사용자 정보 조회 (role 포함)
+                const user = await getCurrentUser();
+                setCurrentUser(user);
+                setIsLoggedIn(true);
             } catch (error) {
-                // 인터셉터에서 처리되지 않은 에러 (예: 네트워크 오류, refresh 실패 등)
+                // 인증 실패 시
+                setCurrentUser(null);
                 setIsLoggedIn(false);
                 console.error("인증 상태 확인 실패:", error);
             }
         };
-        
+
         // 브라우저 환경에서만 실행
         if (typeof window !== 'undefined') {
             verifyAuth();
@@ -86,16 +81,29 @@ const Header = () => {
                     <span>서울의 모든 오타쿠 성지를 한눈에</span>
                 </div>
 
-                {/* 🔥 로그인/로그아웃 버튼 조건부 렌더링 영역 */}
-                <div className="mt-6 flex justify-center">
+                {/* 🔥 로그인/로그아웃 및 관리자 버튼 조건부 렌더링 영역 */}
+                <div className="mt-6 flex justify-center gap-3">
                     {isLoggedIn ? (
-                        // 🟢 로그인 상태일 때: 로그아웃 버튼 표시
-                        <button
-                            onClick={handleLogout}
-                            className="bg-white text-primary font-semibold py-2 px-4 rounded-lg hover:bg-gray-100 transition"
-                        >
-                            로그아웃
-                        </button>
+                        <>
+                            {/* 관리자 버튼 - ROLE_ADMIN일 때만 표시 */}
+                            {currentUser?.role === 'ROLE_ADMIN' && (
+                                <Link
+                                    href="/admin/users"
+                                    className="bg-gradient-to-r from-purple-600 to-purple-700 text-white font-semibold py-2 px-4 rounded-lg hover:from-purple-700 hover:to-purple-800 transition flex items-center gap-2"
+                                >
+                                    <Settings className="w-4 h-4" />
+                                    관리자
+                                </Link>
+                            )}
+
+                            {/* 로그아웃 버튼 */}
+                            <button
+                                onClick={handleLogout}
+                                className="bg-white text-primary font-semibold py-2 px-4 rounded-lg hover:bg-gray-100 transition"
+                            >
+                                로그아웃
+                            </button>
+                        </>
                     ) : (
                         // 🔴 로그아웃 상태일 때: 로그인/회원가입 버튼 표시
                         <Link

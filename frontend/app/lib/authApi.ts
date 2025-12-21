@@ -1,5 +1,5 @@
 import api from "@/lib/api";
-import type { ApiResponse } from "../types";
+import type { ApiResponse, User } from "../types";
 
 /**
  * 아이디 중복 확인
@@ -82,4 +82,12 @@ export async function checkAuth(): Promise<boolean> {
   } catch (error) {
     return false;
   }
+}
+
+/**
+ * 현재 로그인한 사용자 정보 조회 (role 포함)
+ */
+export async function getCurrentUser(): Promise<User> {
+  const response = await api.get<ApiResponse<User>>('/api/v1/auth/me');
+  return response.data.data;
 }
