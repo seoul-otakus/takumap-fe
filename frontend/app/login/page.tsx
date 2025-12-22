@@ -3,8 +3,7 @@ import { useState } from 'react';
 import { FcGoogle } from "react-icons/fc";
 import { SiKakaotalk, SiNaver } from "react-icons/si";
 
-const BACKEND_URL = "http://localhost:8080/api/v1";
-
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 const getButtonStyle = (base: string, bgColor: string, hoverColor: string) => 
     `${base} ${bgColor} ${hoverColor} w-full flex items-center justify-center gap-3 text-lg py-2 px-4 rounded-lg font-semibold transition duration-150 ease-in-out`;
 
