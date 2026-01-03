@@ -9,7 +9,8 @@ const buttonStyle = "w-full text-white bg-blue-600 hover:bg-blue-700 text-lg py-
 const sideButtonStyle = "flex-shrink-0 ml-2 py-3 px-4 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none transition duration-150";
 const inputGroupStyle = "flex items-center space-x-2"; // input과 버튼을 가로로 배열하기 위한 스타일
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+const BACKEND_URL = "http://localhost:8080";
+const BASE_AUTH_URL : string = `${BACKEND_URL}/api/v1/auth`;
 
 export default function SignupPage() {
     const [userId, setUserId] = useState<string>('');
@@ -17,7 +18,7 @@ export default function SignupPage() {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [passwordConfirm, setPasswordConfirm] = useState<string>('');
-    const [verificationCode, setVerificationCode] = useState<string>(''); // 인증번호 상태
+    const [certificationNumber, setVerificationCode] = useState<string>(''); // 인증번호 상태 -> 백엔드의 certificationNumber와 매핑
 
     // 인증 관련 상태
     const [isIdChecked, setIsIdChecked] = useState<boolean>(false); // 아이디 중복 확인 여부
@@ -25,12 +26,24 @@ export default function SignupPage() {
     const [isEmailVerified, setIsEmailVerified] = useState<boolean>(false); // 이메일 인증 완료 여부
     const [isCodeSent, setIsCodeSent] = useState<boolean>(false); // 인증번호 전송 여부
 
-    // 백엔드 API 호출 경로
-    const SIGNUP_API_URL: string = `${BACKEND_URL}/auth/signup`;
+    // 공통 Fetch 래퍼(에러 처리용)
+    const requestApi = async (url: string, body: any) => {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body),
+        });
+        const result = await response.json();
+        if(!response.ok){
+            throw new Error(result.message || 'API 요청 중 오류가 발생했습니다.');
+        }
+        return result;
+    };
 
-    // 💡 (임시) 아이디 중복 확인 핸들러
+    //  아이디 중복 확인 핸들러
     const handleIdCheck = async () => {
-        // 실제 API 호출 (예: /api/v1/auth/check-userId) 로직이 여기에 들어갑니다.
         console.log('아이디 중복 확인 요청:', userId);
         if (userId.length < 4) {
              alert('아이디는 4자 이상이어야 합니다.');
@@ -38,94 +51,61 @@ export default function SignupPage() {
              return;
         }
 
-        // --- Mock Logic Start (실제 백엔드 응답을 가정) ---
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        if (userId === 'testuser') { 
-            alert('이미 사용 중인 아이디입니다.');
-            setIsIdChecked(false);
-        } else {
+        try{
+            await requestApi(`${BASE_AUTH_URL}/id-check`, { userId : userId });
             alert('사용 가능한 아이디입니다.');
             setIsIdChecked(true);
+        } catch (error) {
+            alert('이미 사용 중인 아이디입니다.');
+            setIsIdChecked(false);
         }
-        // --- Mock Logic End ---
     };
 
-    // 💡 (임시) 닉네임 중복 확인 핸들러
+    // 닉네임 중복 확인 핸들러
     const handleNicknameCheck = async () => {
-        // 실제 API 호출 (예: /api/v1/auth/check-nickname) 로직이 여기에 들어갑니다.
-        console.log('닉네임 중복 확인 요청:', nickname);
         if (nickname.length < 2) {
              alert('닉네임은 2자 이상이어야 합니다.');
              setIsNicknameChecked(false);
              return;
         }
-        
-        // --- Mock Logic Start (실제 백엔드 응답을 가정) ---
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        if (nickname === '중복닉') {
-            alert('이미 사용 중인 닉네임입니다.');
-            setIsNicknameChecked(false);
-        } else {
+
+        try{
+            await requestApi(`${BASE_AUTH_URL}/nickname-check`, { nickname  : nickname});
             alert('사용 가능한 닉네임입니다.');
             setIsNicknameChecked(true);
-        }
-        // --- Mock Logic End ---
-    };
-
-    // 💡 이메일 인증번호 전송 버튼 핸들러
-    const handleEmailVerifySend = async () => {
-        // 실제 API 호출 (예: /api/v1/email/send-code) 로직이 여기에 들어갑니다.
-        console.log('이메일 인증번호 전송 요청:', email);
-        
-        // 유효성 검사
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            alert('유효하지 않은 이메일 형식입니다.');
-            return;
-        }
-
-        if (isEmailVerified) {
-             alert('이미 이메일 인증이 완료되었습니다.');
-             return;
-        }
-        
-        // --- Mock Logic Start (실제 이메일 전송을 가정) ---
-        try {
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            setIsCodeSent(true); // 코드가 성공적으로 전송되었다고 표시
-            setIsEmailVerified(false); // 재전송 시 인증 상태 초기화
-            alert(`인증번호가 ${email}로 발송되었습니다. (모의: 1234)`);
         } catch (error) {
-            alert('이메일 발송에 실패했습니다. 이메일 주소를 확인해주세요.');
+            alert('이미 사용 중인 닉네임입니다.');
+            setIsNicknameChecked(false);
         }
-        // --- Mock Logic End ---
     };
 
-    // 💡 인증번호 확인 버튼 핸들러
-    const handleCertifyCheck = async () => {
-        // 실제 API 호출 (예: /api/v1/email/verify-code) 로직이 여기에 들어갑니다.
-        console.log('인증번호 확인 요청:', verificationCode);
-        
-        if (!isCodeSent) {
-            alert('먼저 이메일 인증번호를 발송해주세요.');
-            return;
+   // 이메일 인증번호 발송 (POST /email-certification)
+    const handleEmailVerifySend = async () => {
+        if (!userId) return alert('아이디를 먼저 입력해주세요.');
+        try {
+            // 백엔드 EmailCertificationRequestDTO는 userId와 email을 모두 받을 수 있도록 설계되어 있음
+            await requestApi(`${BASE_AUTH_URL}/email-certification`, { userId : userId, email : email });
+            alert(`인증번호가 ${email}로 발송되었습니다.`);
+            setIsCodeSent(true);
+        } catch (error: any) {
+            alert(error.message);
         }
+    };
 
-        if (verificationCode.length !== 4) {
-            alert('인증번호 4자리를 정확히 입력해주세요.');
-            return;
-        }
-        
-        // --- Mock Logic Start (실제 인증번호 확인을 가정) ---
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        if (verificationCode === '1234') { // '1234'를 올바른 인증번호로 가정
+    // 인증번호 확인 (POST /check-certification)
+    const handleCertifyCheck = async () => {
+        try {
+            await requestApi(`${BASE_AUTH_URL}/check-certification`, { 
+                userId : userId,
+                email : email, 
+                certificationNumber : certificationNumber
+            });
             alert('이메일 인증이 완료되었습니다. ✅');
             setIsEmailVerified(true);
-        } else {
-            alert('인증번호가 일치하지 않습니다.');
+        } catch (error: any) {
+            alert(error.message);
             setIsEmailVerified(false);
         }
-        // --- Mock Logic End ---
     };
 
     // 최종 회원가입 핸들러
@@ -151,36 +131,15 @@ export default function SignupPage() {
         }
 
         try {
-            const response = await fetch(SIGNUP_API_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                // 백엔드 DTO에 맞게 JSON 본문 생성
-                body: JSON.stringify({
-                    userId: userId,
-                    nickname: nickname, 
-                    email: email,
-                    password: password,
-                }),
+            await requestApi(`${BASE_AUTH_URL}/sign-up`, {
+                userId : userId, password : password, email : email, nickname : nickname, certificationNumber : certificationNumber
             });
-
-            if (response.ok) {
-                alert('회원가입이 성공적으로 완료되었습니다! 로그인 페이지로 이동합니다.');
-                window.location.href = '/login'; 
-            } else if (response.status === 400) {
-                // 백엔드 유효성 검사 실패 (아이디 중복, 비밀번호 규칙 등)
-                const errorData = await response.json();
-                alert(`회원가입 실패: ${errorData.message || '입력 정보를 확인해주세요.'}`);
-            } else {
-                alert('회원가입 중 서버 오류가 발생했습니다. 다시 시도해주세요.');
-            }
-
+            alert('회원가입이 성공적으로 완료되었습니다! 로그인 페이지로 이동합니다.');
+            window.location.href = '/login';
         } catch (error) {
-            console.error('회원가입 처리 중 오류 발생:', error);
-            alert('서버 연결에 실패했습니다.');
-        }
-    };
+            alert('회원가입에 실패했습니다. 다시 시도해주세요.');
+        };
+    }
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
@@ -261,16 +220,16 @@ export default function SignupPage() {
 
                     {/* 4. 인증번호 입력 + 인증 확인 버튼 */}
                     <div className="space-y-2 text-left">
-                        <label htmlFor="verificationCode" className={labelStyle}>인증번호</label>
+                        <label htmlFor="certificationNumber" className={labelStyle}>인증번호</label>
                         <div className={inputGroupStyle}>
                             <input
-                                id="verificationCode"
+                                id="certificationNumber"
                                 type="text"
-                                placeholder="인증번호 4자리를 입력해주세요"
+                                placeholder="인증번호 6자리를 입력해주세요"
                                 required
-                                maxLength={4}
+                                maxLength={6}
                                 className={inputStyle + (isEmailVerified ? " border-green-500" : "")}
-                                value={verificationCode}
+                                value={certificationNumber}
                                 onChange={(e) => setVerificationCode(e.target.value)}
                                 // 코드가 발송되지 않았거나, 인증 완료된 경우 입력 불가
                                 disabled={isEmailVerified || !isCodeSent} 
@@ -279,8 +238,8 @@ export default function SignupPage() {
                                 type="button"
                                 onClick={handleCertifyCheck}
                                 className={sideButtonStyle}
-                                // 인증 완료 상태이거나, 코드가 4자리가 아니거나, 코드가 발송되지 않았으면 비활성화
-                                disabled={isEmailVerified || verificationCode.length !== 4 || !isCodeSent}
+                                // 인증 완료 상태이거나, 코드가 6자리가 아니거나, 코드가 발송되지 않았으면 비활성화
+                                disabled={isEmailVerified || certificationNumber.length !== 6 || !isCodeSent}
                             >
                                 {isEmailVerified ? '인증 완료' : '인증 확인'}
                             </button>
@@ -288,17 +247,23 @@ export default function SignupPage() {
                     </div>
 
                     {/* 5. 비밀번호 입력 */}
-                    <div className="space-y-2 text-left">
-                        <label htmlFor="password" className={labelStyle}>비밀번호</label>
-                        <input
-                            id="password"
-                            type="password"
-                            placeholder="비밀번호를 입력해주세요"
-                            required
-                            className={inputStyle}
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
+                    <div className="space-y-1 text-left"> {/* space-y-4의 영향을 받는 하나의 그룹 */}
+                        <div className="space-y-2">
+                            <label htmlFor="password" className={labelStyle}>비밀번호</label>
+                            <input
+                                id="password"
+                                type="password"
+                                placeholder="비밀번호를 입력해주세요"
+                                required
+                                className={inputStyle}
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </div>
+                        {/* mt-1 또는 space-y-1을 통해 인풋창 바로 밑에 붙게 설정 */}
+                        <p className="text-[11px] text-gray-500 ml-1">
+                            * 영문자(대소문자), 숫자, 특수문자(!@#$%^&+=) 포함 8~15글자
+                        </p>
                     </div>
 
                     {/* 6. 비밀번호 확인 입력 */}

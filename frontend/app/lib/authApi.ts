@@ -1,17 +1,13 @@
 import api from "@/lib/api";
 import type { ApiResponse, User } from "../types";
 
-/**
- * 아이디 중복 확인
- */
+/*아이디 중복 확인 */
 export async function checkUserId(userId: string): Promise<void> {
   const response = await api.post<ApiResponse<null>>('/api/v1/auth/id-check', { userId });
   return;
 }
 
-/**
- * 이메일 인증번호 발송
- */
+/* 이메일 인증번호 발송 */
 export async function sendEmailCertification(email: string, userId: string): Promise<void> {
   const response = await api.post<ApiResponse<null>>('/api/v1/auth/email-certification', {
     email,
@@ -20,9 +16,7 @@ export async function sendEmailCertification(email: string, userId: string): Pro
   return;
 }
 
-/**
- * 이메일 인증번호 확인
- */
+/* 이메일 인증번호 확인 */
 export async function checkCertification(
   userId: string,
   email: string,
@@ -36,9 +30,7 @@ export async function checkCertification(
   return;
 }
 
-/**
- * 회원가입
- */
+/* 회원가입 */
 export async function signUp(data: {
   userId: string;
   nickname: string;
@@ -50,31 +42,23 @@ export async function signUp(data: {
   return;
 }
 
-/**
- * 로그인
- */
+/* 로그인 */
 export async function signIn(userId: string, password: string): Promise<{ accessToken: string; refreshToken: string }> {
   const response = await api.post('/api/v1/auth/sign-in', { userId, password });
   return response.data.result;
 }
 
-/**
- * 로그아웃
- */
+/* 로그아웃 */
 export async function logout(): Promise<void> {
   await api.post('/api/v1/auth/logout');
 }
 
-/**
- * 토큰 갱신
- */
+/* 토큰 갱신 */
 export async function refreshAccessToken(): Promise<void> {
   await api.post('/api/v1/auth/refresh');
 }
 
-/**
- * 사용자 인증 확인
- */
+/* 사용자 인증 확인 */
 export async function checkAuth(): Promise<boolean> {
   try {
     await api.get('/api/v1/auth/check');
@@ -84,10 +68,8 @@ export async function checkAuth(): Promise<boolean> {
   }
 }
 
-/**
- * 현재 로그인한 사용자 정보 조회 (role 포함)
- */
+/* 현재 로그인한 사용자 정보 조회 (role 포함) */
 export async function getCurrentUser(): Promise<User> {
-  const response = await api.get<ApiResponse<User>>('/api/v1/auth/me');
+  const response = await api.get<ApiResponse<User>>('http://localhost:8080/api/v1/users/me');
   return response.data.data;
 }
