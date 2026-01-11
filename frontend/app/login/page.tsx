@@ -19,9 +19,9 @@ export default function LoginPage() {
     const handleSocialLogin = (provider: string) => {
         // Spring Security의 표준 인증 시작 엔드포인트 사용
         // BE: .authorizationEndpoint(endpoint -> endpoint.baseUri("/api/v1/oauth2")) 설정에 따라
-        // 모든 Provider가 http://localhost:8080/api/v1/oauth2/{provider} 경로로 요청하도록 통일
-        const oauthStartUrl: string = `${BACKEND_URL}/oauth2/${provider}`; 
-        
+        // 모든 Provider가 /api/v1/oauth2/{provider} 경로로 요청하도록 통일
+        const oauthStartUrl: string = `${BACKEND_URL}/api/v1/oauth2/${provider}`;
+
         // 최종적으로 결정된 URL로 이동
         window.location.href = oauthStartUrl;
     };

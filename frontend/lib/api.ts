@@ -1,6 +1,9 @@
 import axios from 'axios';
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8081';
+
 const api = axios.create({
+    baseURL: `${BACKEND_URL}/api/v1`,
     withCredentials: true
 });
 
@@ -18,7 +21,7 @@ api.interceptors.response.use(
             originalRequest._retry = true;
 
             try {
-                await api.post('/api/v1/auth/refresh');
+                await api.post('/auth/refresh');
                 console.log('토큰 재발급 성공, 원래 요청을 재시도합니다.');
                 return api(originalRequest);
             } catch (refreshError) {

@@ -26,7 +26,7 @@ export default function SignupPage() {
     const [isCodeSent, setIsCodeSent] = useState<boolean>(false); // 인증번호 전송 여부
 
     // 백엔드 API 호출 경로
-    const SIGNUP_API_URL: string = `${BACKEND_URL}/auth/signup`;
+    const SIGNUP_API_URL: string = `${BACKEND_URL}/api/v1/auth/signup`;
 
     // 💡 (임시) 아이디 중복 확인 핸들러
     const handleIdCheck = async () => {

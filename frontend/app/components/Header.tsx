@@ -11,8 +11,6 @@ const Header = () => {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
 
-    // const BACKEND_URL = "http://localhost:8080/api/v1";
-    
     useEffect(() => {
         const verifyAuth = async () => {
             try {
@@ -36,10 +34,10 @@ const Header = () => {
 
     // 2. 로그아웃 핸들러 (서버에서 쿠키를 만료시키는 방식)
     const handleLogout = async () => {
-        const logoutUrl: string = `/api/v1/auth/logout`;
+        const logoutUrl: string = `/auth/logout`;
 
         try {
-            // api.post()는 자동으로 withCredentials를 처리.
+            // api.post()는 자동으로 withCredentials를 처리하고, baseURL에 /api/v1이 포함되어 있음
             const response = await api.post(logoutUrl);
 
             if (response.status === 200) {
