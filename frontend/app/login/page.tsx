@@ -23,7 +23,11 @@ export default function LoginPage() {
     
     // 1. 소셜 로그인 핸들러 (OAuth2 시작)
     const handleSocialLogin = (provider: string) => {
+        // BE: .authorizationEndpoint(endpoint -> endpoint.baseUri("/api/v1/oauth2")) 설정에 따라
+        // 모든 Provider가 /api/v1/oauth2/{provider} 경로로 요청하도록 통일
         const oauthStartUrl: string = `${BASE_AUTH_URL}/oauth2/${provider}`; 
+
+        // 최종적으로 결정된 URL로 이동
         window.location.href = oauthStartUrl;
     };
 
