@@ -3,7 +3,8 @@ import axios from 'axios';
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8081';
 
 const api = axios.create({
-    baseURL: `${BACKEND_URL}/api/v1`,
+    baseURL: 'http://localhost:8080', // 백엔드 서버 주소
+    // baseURL: `${BACKEND_URL}/api/v1`,
     withCredentials: true
 });
 

@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import type { ViewMode, Place } from "./types/index";
 import { places as staticPlaces } from "./lib/places";
-import { checkAuth } from "./lib/authApi";
+import { useAuth } from "./context/AuthContext"; // 1. useAuth import
 import { getFavoriteShopIds } from "./lib/favoriteApi";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -14,31 +14,33 @@ import SearchBar from "./components/SearchBar";
 import CategoryFilter from "./components/CategoryFilter";
 
 export default function Home() {
+  const { isLoggedIn } = useAuth(); // 2. useAuth에서 로그인 상태 가져오기
   const [viewMode, setViewMode] = useState<ViewMode>("list");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false); // 3. 내부 isLoggedIn 상태 제거
   const [favoriteShopIds, setFavoriteShopIds] = useState<Set<number>>(new Set());
   const [places, setPlaces] = useState<Place[]>([]);
 
-  // 로그인 상태 확인 및 즐겨찾기 목록 조회
+  // 4. 로그인 상태(isLoggedIn)에 따라 즐겨찾기 목록을 다시 불러오도록 useEffect 수정
   useEffect(() => {
-    const verifyAuth = async () => {
-      const authenticated = await checkAuth();
-      setIsLoggedIn(authenticated);
-
-      if (authenticated) {
+    const fetchFavorites = async () => {
+      if (isLoggedIn) {
         try {
           const ids = await getFavoriteShopIds();
           setFavoriteShopIds(new Set(ids));
         } catch (error) {
           console.error("즐겨찾기 목록 조회 실패:", error);
+          setFavoriteShopIds(new Set()); // 에러 발생 시 초기화
         }
+      } else {
+        // 로그아웃 상태이면 즐겨찾기 목록 초기화
+        setFavoriteShopIds(new Set());
       }
     };
-    verifyAuth();
-  }, []);
+    fetchFavorites();
+  }, [isLoggedIn]); // isLoggedIn이 변경될 때마다 실행
 
   // 정적 데이터에 즐겨찾기 상태 매핑
   useEffect(() => {
