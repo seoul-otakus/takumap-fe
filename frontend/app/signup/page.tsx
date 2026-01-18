@@ -9,7 +9,7 @@ const buttonStyle = "w-full text-white bg-blue-600 hover:bg-blue-700 text-lg py-
 const sideButtonStyle = "flex-shrink-0 ml-2 py-3 px-4 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none transition duration-150";
 const inputGroupStyle = "flex items-center space-x-2"; // input과 버튼을 가로로 배열하기 위한 스타일
 
-const BACKEND_URL = "http://localhost:8080";
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
 const BASE_AUTH_URL : string = `${BACKEND_URL}/api/v1/auth`;
 
 export default function SignupPage() {

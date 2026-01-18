@@ -66,7 +66,6 @@ export async function checkAuth(): Promise<boolean> {
 
 /* 현재 로그인한 사용자 정보 조회 (role 포함) */
 export async function getCurrentUser(): Promise<User> {
-  const response = await api.get<ApiResponse<User>>('http://localhost:8080/api/v1/users/me');
-  // const response = await api.get<ApiResponse<User>>('/auth/me');
+  const response = await api.get<ApiResponse<User>>('/api/v1/users/me');
   return response.data.data;
 }

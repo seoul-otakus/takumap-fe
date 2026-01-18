@@ -6,8 +6,7 @@ import { SiKakaotalk, SiNaver } from "react-icons/si";
 import { useAuth } from '../context/AuthContext'; // 1. useAuth import
 import { User } from '../types'; // User 타입 import
 
-const BACKEND_URL = "http://localhost:8080";
-// const BACKEND_URL = "https://api.ourhour.cloud";
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
 const BASE_AUTH_URL : string = `${BACKEND_URL}/api/v1`;
 const getButtonStyle = (base: string, bgColor: string, hoverColor: string) => 
     `${base} ${bgColor} ${hoverColor} w-full flex items-center justify-center gap-3 text-lg py-2 px-4 rounded-lg font-semibold transition duration-150 ease-in-out`;
