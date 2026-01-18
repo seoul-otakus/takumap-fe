@@ -3,17 +3,15 @@ import type { ApiResponse, User } from "../types";
 
 /*아이디 중복 확인 */
 export async function checkUserId(userId: string): Promise<void> {
-  const response = await api.post<ApiResponse<null>>('/auth/id-check', { userId });
-  return;
+  await api.post<ApiResponse<null>>('/auth/id-check', { userId });
 }
 
 /* 이메일 인증번호 발송 */
 export async function sendEmailCertification(email: string, userId: string): Promise<void> {
-  const response = await api.post<ApiResponse<null>>('/auth/email-certification', {
+  await api.post<ApiResponse<null>>('/auth/email-certification', {
     email,
     userId
   });
-  return;
 }
 
 /* 이메일 인증번호 확인 */
@@ -22,12 +20,11 @@ export async function checkCertification(
   email: string,
   certificationNumber: string
 ): Promise<void> {
-  const response = await api.post<ApiResponse<null>>('/auth/check-certification', {
+  await api.post<ApiResponse<null>>('/auth/check-certification', {
     userId,
     email,
     certificationNumber
   });
-  return;
 }
 
 /* 회원가입 */
@@ -38,8 +35,7 @@ export async function signUp(data: {
   password: string;
   certificationNumber: string;
 }): Promise<void> {
-  const response = await api.post<ApiResponse<null>>('/auth/sign-up', data);
-  return;
+  await api.post<ApiResponse<null>>('/auth/sign-up', data);
 }
 
 /* 로그인 */
@@ -63,7 +59,7 @@ export async function checkAuth(): Promise<boolean> {
   try {
     await api.get('/auth/check');
     return true;
-  } catch (error) {
+  } catch {
     return false;
   }
 }

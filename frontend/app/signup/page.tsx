@@ -27,7 +27,7 @@ export default function SignupPage() {
     const [isCodeSent, setIsCodeSent] = useState<boolean>(false); // 인증번호 전송 여부
 
     // 공통 Fetch 래퍼(에러 처리용)
-    const requestApi = async (url: string, body: any) => {
+    const requestApi = async (url: string, body: Record<string, string>) => {
         const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -55,7 +55,7 @@ export default function SignupPage() {
             await requestApi(`${BASE_AUTH_URL}/id-check`, { userId : userId });
             alert('사용 가능한 아이디입니다.');
             setIsIdChecked(true);
-        } catch (error) {
+        } catch {
             alert('이미 사용 중인 아이디입니다.');
             setIsIdChecked(false);
         }
@@ -73,7 +73,7 @@ export default function SignupPage() {
             await requestApi(`${BASE_AUTH_URL}/nickname-check`, { nickname  : nickname});
             alert('사용 가능한 닉네임입니다.');
             setIsNicknameChecked(true);
-        } catch (error) {
+        } catch {
             alert('이미 사용 중인 닉네임입니다.');
             setIsNicknameChecked(false);
         }
@@ -87,23 +87,23 @@ export default function SignupPage() {
             await requestApi(`${BASE_AUTH_URL}/email-certification`, { userId : userId, email : email });
             alert(`인증번호가 ${email}로 발송되었습니다.`);
             setIsCodeSent(true);
-        } catch (error: any) {
-            alert(error.message);
+        } catch (error: unknown) {
+            alert(error instanceof Error ? error.message : 'API 요청 중 오류가 발생했습니다.');
         }
     };
 
     // 인증번호 확인 (POST /check-certification)
     const handleCertifyCheck = async () => {
         try {
-            await requestApi(`${BASE_AUTH_URL}/check-certification`, { 
+            await requestApi(`${BASE_AUTH_URL}/check-certification`, {
                 userId : userId,
-                email : email, 
+                email : email,
                 certificationNumber : certificationNumber
             });
             alert('이메일 인증이 완료되었습니다. ✅');
             setIsEmailVerified(true);
-        } catch (error: any) {
-            alert(error.message);
+        } catch (error: unknown) {
+            alert(error instanceof Error ? error.message : 'API 요청 중 오류가 발생했습니다.');
             setIsEmailVerified(false);
         }
     };
@@ -136,9 +136,9 @@ export default function SignupPage() {
             });
             alert('회원가입이 성공적으로 완료되었습니다! 로그인 페이지로 이동합니다.');
             window.location.href = '/login';
-        } catch (error) {
+        } catch {
             alert('회원가입에 실패했습니다. 다시 시도해주세요.');
-        };
+        }
     }
 
     return (

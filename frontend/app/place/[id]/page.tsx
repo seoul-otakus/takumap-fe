@@ -23,7 +23,6 @@ export default function PlaceDetailPage() {
   const router = useRouter();
   const [place, setPlace] = useState<Place | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [mapLoaded, setMapLoaded] = useState(false);
 
   useEffect(() => {
     const id = Number(params.id);
@@ -60,8 +59,6 @@ export default function PlaceDetailPage() {
           position: markerPosition,
         });
         marker.setMap(map);
-
-        setMapLoaded(true);
       });
     };
 

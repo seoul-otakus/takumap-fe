@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { UserListItem } from '@/app/types';
 import { getAllUsers, deleteUser } from '@/app/lib/adminApi';
@@ -21,29 +21,7 @@ export default function AdminUsersPage() {
         checkAdminAccess();
     }, []);
 
-    // Load users when page changes
-    useEffect(() => {
-        if (isAdmin) {
-            loadUsers();
-        }
-    }, [currentPage, isAdmin]);
-
-    const checkAdminAccess = async () => {
-        try {
-            const user = await getCurrentUser();
-            if (user.role !== 'ROLE_ADMIN') {
-                setError('관리자 권한이 필요합니다.');
-                setIsAdmin(false);
-            } else {
-                setIsAdmin(true);
-            }
-        } catch (err) {
-            setError('인증에 실패했습니다. 로그인이 필요합니다.');
-            setIsAdmin(false);
-        }
-    };
-
-    const loadUsers = async () => {
+    const loadUsers = useCallback(async () => {
         try {
             setLoading(true);
             const response = await getAllUsers(currentPage, 20);
@@ -56,6 +34,28 @@ export default function AdminUsersPage() {
             console.error(err);
         } finally {
             setLoading(false);
+        }
+    }, [currentPage]);
+
+    // Load users when page changes
+    useEffect(() => {
+        if (isAdmin) {
+            loadUsers();
+        }
+    }, [isAdmin, loadUsers]);
+
+    const checkAdminAccess = async () => {
+        try {
+            const user = await getCurrentUser();
+            if (user.role !== 'ROLE_ADMIN') {
+                setError('관리자 권한이 필요합니다.');
+                setIsAdmin(false);
+            } else {
+                setIsAdmin(true);
+            }
+        } catch {
+            setError('인증에 실패했습니다. 로그인이 필요합니다.');
+            setIsAdmin(false);
         }
     };
 

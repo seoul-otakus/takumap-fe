@@ -24,6 +24,7 @@ const PlaceList = ({ places, isLoggedIn = false, onFavoriteChange }: PlaceListPr
   const hasMore = visibleCount < places.length;
 
   useEffect(() => {
+    const currentTarget = observerTarget.current;
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && hasMore && !isLoading) {
@@ -38,13 +39,13 @@ const PlaceList = ({ places, isLoggedIn = false, onFavoriteChange }: PlaceListPr
       { threshold: 0.1 }
     );
 
-    if (observerTarget.current) {
-      observer.observe(observerTarget.current);
+    if (currentTarget) {
+      observer.observe(currentTarget);
     }
 
     return () => {
-      if (observerTarget.current) {
-        observer.unobserve(observerTarget.current);
+      if (currentTarget) {
+        observer.unobserve(currentTarget);
       }
     };
   }, [hasMore, isLoading, places.length]);
