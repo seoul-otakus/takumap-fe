@@ -110,7 +110,23 @@ export default function LoginPage() {
                     <button type="submit" className={getButtonStyle("text-white", "bg-blue-600", "hover:bg-blue-700")}>
                         로그인
                     </button>
-                    
+
+                    <div className="flex justify-between text-sm mt-3">
+                        <button
+                            type="button"
+                            onClick={() => router.push('/find-id')}
+                            className="text-blue-600 hover:text-blue-800 font-medium transition duration-150"
+                        >
+                            아이디 찾기
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => router.push('/reset-password')}
+                            className="text-blue-600 hover:text-blue-800 font-medium transition duration-150"
+                        >
+                            비밀번호 찾기
+                        </button>
+                    </div>                   
                     <button 
                         type="button" 
                         onClick={handleSignupNavigation} 
