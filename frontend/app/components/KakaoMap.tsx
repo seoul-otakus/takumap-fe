@@ -36,15 +36,23 @@ const KakaoMap = ({ places }: KakaoMapProps) => {
 
       // 인포윈도우 내용
       const infowindowContent = `
-        <div style="padding: 15px; min-width: 200px;">
-          <div style="font-weight: bold; font-size: 16px; margin-bottom: 8px; color: #333;">
+        <div style="padding: 15px; min-width: 180px; max-width: 280px; width: max-content; box-sizing: border-box;">
+          <div style="font-weight: bold; font-size: 16px; margin-bottom: 8px; color: #333; word-break: keep-all;">
             ${place.name}
           </div>
           <div style="display: inline-block; padding: 4px 8px; background-color: #FF6B9D; color: white; border-radius: 12px; font-size: 12px; margin-bottom: 8px;">
             ${place.category}
           </div>
-          <div style="font-size: 13px; color: #666; margin-top: 8px;">
+          <div style="font-size: 13px; color: #666; margin-top: 8px; word-break: keep-all; line-height: 1.4;">
             ${place.address}
+          </div>
+          <div style="display: flex; gap: 8px; margin-top: 12px; align-items: center;">
+            <a href="${place.naverMapUrl}" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 4px; padding: 5px 10px; background-color: #03C75A; color: white; border-radius: 6px; font-size: 12px; font-weight: 600; text-decoration: none; white-space: nowrap;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+              <img src="https://map.naver.com/favicon.ico" alt="N" style="width: 14px; height: 14px; border-radius: 2px;" onerror="this.style.display='none'"/>네이버지도
+            </a>
+            <a href="${place.kakaoMapUrl}" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 4px; padding: 5px 10px; background-color: #FEE500; color: #191919; border-radius: 6px; font-size: 12px; font-weight: 600; text-decoration: none; white-space: nowrap;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+              <img src="https://map.kakao.com/favicon.ico" alt="K" style="width: 14px; height: 14px; border-radius: 2px;" onerror="this.style.display='none'"/>카카오맵
+            </a>
           </div>
         </div>
       `;
